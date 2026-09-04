@@ -1,4 +1,4 @@
-import conf from '../conf.js';
+import conf from '../conf/conf.js';
 
 import { Client, Account, ID } from "appwrite";
 
@@ -9,7 +9,7 @@ export class Authservive {
     constructor() {
         this.client
             .setEndpoint(conf.appwriteUrl)
-            .setProject(conf.ProjectId);
+            .setProject(conf.projectId);
 
         this.account = new Account(this.client);
     }
@@ -55,6 +55,7 @@ export class Authservive {
         try {
             return await this.account.get();
         } catch (error) {
+            console.log("No active session:", error);
             return null;
         }
     }
