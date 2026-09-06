@@ -14,48 +14,51 @@ export class Authservive {
         this.account = new Account(this.client);
     }
 
-    async createAccount(email, password, name) {
-        try {
-            const response = await this.account.create(
-                ID.unique(),
-                email,
-                password,
-                name
-            );
+   async createAccount(email, password, name) {
+    try {
+        const userId = ID.unique();
 
-            if (response) {
-                // Automatically login after creating account
-                return await this.login(email, password);
-            }
+        console.log("Generated ID:", userId);
+        console.log("EMAIL:", email);
+        console.log("NAME:", name);
 
-            return response;
+        const response = await this.account.create({
+            userId,
+            email,
+            password,
+            name,
+        });
 
-        } catch (error) {
-            console.error(error);
-            throw error;
+        if (response) {
+            return await this.login(email, password);
         }
+
+        return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
+}
 
     async login(email, password) {
-        try {
-            const response = await this.account.createSession(
-                email,
-                password
-            );
+    try {
+        const response = await this.account.createEmailPasswordSession({
+            email,
+            password,
+        });
 
-            return response;
-
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
+        return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
+}
 
     async Getcurrentuser() {
         try {
             return await this.account.get();
         } catch (error) {
-            console.log("No active session:", error);
+            console.log("No active session:");
             return null;
         }
     }

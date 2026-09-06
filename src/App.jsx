@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { header, footer } from './components';
+import { Header, Footer } from './components/index.js';
 import './App.css'
 import { useDispatch } from 'react-redux';
 import { login, logout } from './store/authslice.js';
 import authservice from './appwrite/auth.js';
+import { Outlet } from "react-router-dom";
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -28,12 +29,11 @@ function App() {
   }
   return (
   <div className="flex flex-col items-center justify-center min-h-screen bg-gray-400"> 
-    <h1>Welcome to the App</h1> 
-    <header />
+    <Header />
       <main>
-        {/* outlet */}
+        <Outlet />
       </main>
-    <footer />
+    <Footer />
   </div>);
 }
 

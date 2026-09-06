@@ -1,14 +1,10 @@
 import React from "react";
-import { container, Logo, Logout } from "../index.js";
-
-import { Link } from "react-router-dom";
+import { Container, Logo, Logout } from "../index.js";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
-import { useNavigate } from "react-router-dom";
 
 function Header() {
   const authstatus = useSelector((state) => state.auth.status);
-
   const navigate = useNavigate();
 
   const navitems = [
@@ -18,58 +14,66 @@ function Header() {
       active: true,
     },
     {
-      name: "login",
+      name: "Login",
       slug: "/login",
       active: !authstatus,
     },
-    { name: "signup", slug: "/signup", active: !authstatus },
     {
-      nmae: "Allpost",
-      slug: "/allpost",
+      name: "Sign Up",
+      slug: "/signup",
+      active: !authstatus,
+    },
+    {
+      name: "All Posts",
+      slug: "/all-posts",
       active: authstatus,
     },
     {
-      nmae: "Addpost",
-      slug: "/addpost",
+      name: "Add Post",
+      slug: "/add-post",
       active: authstatus,
     },
   ];
-  return (
-    <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
-      <container>
-        <nav className="flex justify-between items-center">
-          <div className="mr-4">
-            <Link to="/">
-              <Logo />
-            </Link>
-          </div>
 
-          <ul className="flex space-x-4 ml-auto">
-            {navitems.map((item, index) => {
-              if (item.active) {
-                return (
-                  <li key={item.name} className="hover:text-gray-400">
+  return (
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-gray-900/95 backdrop-blur-md shadow-lg">
+      <Container>
+        <nav className="flex min-h-[72px] items-center justify-between gap-6">
+          
+          {/* Logo */}
+          <Link
+            to="/"
+            className="shrink-0 transition-transform duration-200 hover:scale-105"
+          >
+            <Logo />
+          </Link>
+
+          {/* Navigation */}
+          <div className="flex items-center">
+            <ul className="flex items-center gap-2">
+              {navitems.map((item) =>
+                item.active ? (
+                  <li key={item.name}>
                     <button
-                      className="inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full"
                       onClick={() => navigate(item.slug)}
+                      className="rounded-lg px-4 py-2 text-sm font-medium text-gray-200 transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-95"
                     >
                       {item.name}
                     </button>
                   </li>
-                );
-              } else {
-                return null;
-              }
-            })}
+                ) : null
+              )}
 
-            {authstatus && (
-              <li>
-                <Logout />
-              </li>
-            )}
-          </ul>
+              {/* Logout */}
+              {authstatus && (
+                <li className="ml-2 border-l border-white/10 pl-3">
+                  <Logout />
+                </li>
+              )}
+            </ul>
+          </div>
         </nav>
-      </container>
+      </Container>
     </header>
   );
 }
