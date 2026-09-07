@@ -1,7 +1,9 @@
+
 import React from "react";
-import { Container, Logo, Logout } from "../index.js";
+import { Container, Logout } from "../index.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Logo from "../Logo";
 
 function Header() {
   const authstatus = useSelector((state) => state.auth.status);
@@ -39,13 +41,14 @@ function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-gray-900/95 backdrop-blur-md shadow-lg">
       <Container>
         <nav className="flex min-h-[72px] items-center justify-between gap-6">
-          
+
           {/* Logo */}
           <Link
             to="/"
-            className="shrink-0 transition-transform duration-200 hover:scale-105"
+            className="group flex items-center gap-3 shrink-0"
           >
-            <Logo />
+            {/* Logo Icon */}
+            <Logo width="120px" />
           </Link>
 
           {/* Navigation */}
@@ -79,3 +82,4 @@ function Header() {
 }
 
 export default Header;
+

@@ -127,18 +127,17 @@ export class Service{
         }
     }
 
-    getFilePreview(fileId) {
-        try {
-            return this.bucket.getFilePreview(
-                conf.bucketId,
-                fileId
-            );
-        }
-        catch (error) {
-            console.error(error);
-            throw error;
-        }
+    getFileView(fileId) {
+    try {
+        return this.bucket.getFileView(
+            conf.bucketId,
+            fileId
+        );
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
+}
                                  
 }
 

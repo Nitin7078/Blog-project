@@ -2,6 +2,7 @@ import React from "react";
 import authservive from "../../appwrite/auth.js";
 import { useDispatch } from "react-redux";
 import {logout} from "../../store/authslice.js"
+import Button from "../button.jsx";
 
 function Logout(){
     const dispatch = useDispatch();
@@ -11,7 +12,7 @@ function Logout(){
         });
     };
     return (
-        <button onClick={logouthandler}>logout</button>
+        <Button onClick={logouthandler}>logout</Button>
     )
 }
 
