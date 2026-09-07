@@ -15,19 +15,20 @@ export class Service{
         this.bucket = new Storage(this.client);
     }
 
-    async createPost(title, slug, content, featuredImage, status , userid) {
+    async createPost({title, slug, content, featuredImage, status , user_id}) {
         try {
             return await this.databases.createDocument(
                 conf.databaseId,
                 conf.collectionId,
-                slug,
+                ID.unique(),
                 {
                     title: title,
                         slug: slug,
                         content: content,
-                        featuredImage: featuredImage,
-                        status: status,
-                        userid: userid
+                        img_id: featuredImage,
+                        // featuredImage: featuredImage,
+                        status : status,
+                        user_id: user_id
                     }
                 );
             }
@@ -37,26 +38,25 @@ export class Service{
             }
     }
 
-    async updatePost(slug, { title, content, featuredImage, status }) {
-        try {
-            return await this.databases.updateDocument(
-                conf.databaseId,
-                conf.collectionId,
-                slug,
-                {
-                    title: title,
-                    slug: slug,
-                    content: content,
-                    featuredImage: featuredImage,
-                    status: status
-                }
-            );
-        }
-        catch (error) {
-            console.error(error);
-            throw error;
-        }
-    }
+    async updatePost(postId, { title, slug, content, img_id, status }) {
+  try {
+    return await this.databases.updateDocument(
+      conf.databaseId,
+      conf.collectionId,
+      postId,
+      {
+        title,
+        slug,
+        content,
+        img_id,
+        status
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
     async deletePost(slug) {
         try {
@@ -127,7 +127,7 @@ export class Service{
         }
     }
 
-    getfilepreview(fileId) {
+    getFilePreview(fileId) {
         try {
             return this.bucket.getFilePreview(
                 conf.bucketId,

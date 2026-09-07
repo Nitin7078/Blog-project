@@ -13,20 +13,39 @@ function Login() {
   const [error, setError] = useState("");
 
   const login = async (data) => {
-    setError("");
-    try {
-      const session = await authservice.login(data.email , data.password);
-      if (session) {
-        const userData = await authservice.Getcurrentuser();
-        if (userData) {
-          dispatch(authLogin(userData));
-        }
+  setError("");
+
+  try {
+    // Check if a session already exists
+    const currentUser = await authservice.Getcurrentuser();
+
+    if (currentUser) {
+      dispatch(authLogin(currentUser));
+      navigate("/");
+      return;
+    }
+
+    // No active session → create a new session
+    const session = await authservice.login(
+      data.email,
+      data.password
+    );
+
+    if (session) {
+      const userData = await authservice.Getcurrentuser();
+
+      if (userData) {
+        dispatch(authLogin(userData));
         navigate("/");
       }
-    } catch (error) {
-      setError(error.message);
     }
-  };
+  } catch (error) {
+    console.log("Login error:", error);
+    setError(error.message);
+  }
+};
+
+
   return (
     <div className="flex items-center justify-center w-full">
       <div

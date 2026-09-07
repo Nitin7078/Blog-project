@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, Select, RTE } from "../index";
@@ -7,25 +6,19 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function PostForm({ post }) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    control,
-    getValues,
-  } = useForm({
-    defaultValues: {
-      title: post?.title || "",
-      slug: post?.slug || "",
-      content: post?.content || "",
-      status: post?.status || "",
-    },
-  });
+  const { register, handleSubmit, watch, setValue, control, getValues } =
+    useForm({
+      defaultValues: {
+        title: post?.title || "",
+        slug: post?.slug || "",
+        content: post?.content || "",
+        status: post?.status || "",
+      },
+    });
 
   const navigate = useNavigate();
 
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
     try {
@@ -39,12 +32,15 @@ function PostForm({ post }) {
 
         // Delete old image if a new image was uploaded
         if (file) {
-          await appwriteservice.deleteFile(post.featuredImage);
+          await appwriteservice.deleteFile(post.img_id);
         }
 
         const dbpost = await appwriteservice.updatePost(post.$id, {
-          ...data,
-          featuredImage: file ? file.$id : post.featuredImage,
+          title: data.title,
+          slug: data.slug,
+          content: data.content,
+          status: data.status,
+          img_id: file ? file.$id : post.img_id,
         });
 
         if (dbpost) {
@@ -60,7 +56,7 @@ function PostForm({ post }) {
           const dbpost = await appwriteservice.createPost({
             ...data,
             featuredImage: file_id,
-            userid: userData.$id,
+            user_id: userData.$id,
           });
 
           if (dbpost) {
@@ -142,7 +138,7 @@ function PostForm({ post }) {
         {post && (
           <div className="w-full mb-4">
             <img
-              src={appwriteservice.getFilePreview(post.featuredImage)}
+              src={appwriteservice.getFilePreview(post.img_id)}
               alt={post.title}
               className="rounded-lg"
             />
@@ -158,7 +154,7 @@ function PostForm({ post }) {
 
         <Button
           type="submit"
-          bgColor={post ? "bg-green-500" : undefined}
+          bgcolor={post ? "bg-green-500" : undefined}
           className="w-full"
         >
           {post ? "Update" : "Submit"}

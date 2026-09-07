@@ -40,6 +40,18 @@ export class Authservive {
     }
 }
 
+    
+
+    async Getcurrentuser() {
+        try {
+            return await this.account.get();
+        } catch (error) {
+            console.log("No active session:");
+            return null;
+        }
+    }
+
+
     async login(email, password) {
     try {
         const response = await this.account.createEmailPasswordSession({
@@ -54,14 +66,6 @@ export class Authservive {
     }
 }
 
-    async Getcurrentuser() {
-        try {
-            return await this.account.get();
-        } catch (error) {
-            console.log("No active session:");
-            return null;
-        }
-    }
 
     async logout() {
         try {
